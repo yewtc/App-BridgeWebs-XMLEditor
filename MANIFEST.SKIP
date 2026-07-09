@@ -1,0 +1,13 @@
+^\.git
+^\.git/
+^cover_db/
+^blib/
+^pm_to_blib$
+^Makefile$
+^Makefile\.old$
+^MYMETA\.(json|yml)$
+^App-BridgeWebs-XMLEditor-.*\.tar\.(gz|bz2)$
+^xx\.xml$
+^data/
+^tools/
+^bridge_xml_editor_main\.pl$

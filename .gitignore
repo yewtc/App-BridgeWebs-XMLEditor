@@ -1,0 +1,30 @@
+# ExtUtils::MakeMaker / CPAN build
+/blib/
+/pm_to_blib
+/Makefile
+/Makefile.old
+/META.yml
+/META.json
+/MYMETA.json
+/MYMETA.yml
+/MANIFEST
+/App-BridgeWebs-XMLEditor-*.tar
+/App-BridgeWebs-XMLEditor-*.tar.gz
+
+# Test coverage
+/cover_db/
+
+# Local session data and scratch files
+/data/
+/xx.xml
+/tools/
+
+# Editor / IDE
+/.cursor/
+/.vscode/
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db

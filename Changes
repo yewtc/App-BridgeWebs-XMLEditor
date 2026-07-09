@@ -1,0 +1,4 @@
+0.001 - Initial CPAN release candidate
+  - Extract BridgeWebs::Session core module
+  - GTK3 editor as App::BridgeWebs::XMLEditor
+  - Test suite for session logic

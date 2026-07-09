@@ -1,0 +1,18 @@
+#!/usr/bin/env perl
+
+use v5.36;
+
+use App::BridgeWebs::XMLEditor;
+
+if ( !defined $ENV{DISPLAY} && !defined $ENV{WAYLAND_DISPLAY} ) {
+    die "No display available. Please ensure you have a graphical environment running.\n";
+}
+
+eval {
+    my $xml_file = @ARGV ? $ARGV[0] : undef;
+    my $app = App::BridgeWebs::XMLEditor->new($xml_file);
+    $app->run();
+};
+if ($@) {
+    die "Error running application: $@\n";
+}
