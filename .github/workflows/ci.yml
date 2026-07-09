@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master, 'cursor/**']
+  pull_request:
+
+# Core modules require Perl 5.36 (signatures). Matrix includes 5.34 so CI
+# documents the minimum; those jobs are allowed to fail without blocking.
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Perl ${{ matrix.perl-version }} · ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.perl-version == '5.34' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        perl-version: ['5.34', '5.36', '5.38', '5.40', 'latest']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl-version }}
+          distribution: ${{ matrix.os == 'windows-latest' && 'strawberry' || 'default' }}
+          install-modules-with: cpanm
+          install-modules: |
+            XML::Simple
+            Test::More
+
+      - name: Run tests
+        shell: bash
+        run: prove -Ilib -r t/
+
+  build:
+    name: ExtUtils::MakeMaker build · ubuntu-latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: 'latest'
+          install-modules-with: cpanm
+          install-modules: |
+            XML::Simple
+            Test::More
+
+      - name: Build and test via Makefile
+        run: |
+          perl Makefile.PL
+          make
+          make test
