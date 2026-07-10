@@ -34,7 +34,22 @@ jobs:
 
       - name: Run tests
         shell: bash
-        run: prove -Ilib -r t/
+        run: |
+          # Git Bash on Windows picks MSYS prove, which lacks TAP::Harness::Env.
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            for dir in $(echo "$PATH" | tr ':' '\n'); do
+              case "$dir" in /usr/bin|/bin|/usr/local/bin) continue ;; esac
+              if [ -x "$dir/perl.exe" ]; then
+                export PATH="$dir:$PATH"
+                break
+              fi
+            done
+          fi
+          perl -Ilib -MFile::Find -MTest::Harness -e '
+            my @tests;
+            find(sub { push @tests, $File::Find::name if /\.t\z/ }, "t");
+            runtests sort @tests;
+          '
 
   build:
     name: ExtUtils::MakeMaker build · ubuntu-latest
